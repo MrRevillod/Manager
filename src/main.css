@@ -1,0 +1,14 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.menu-item-selected::after {
+    content: "";
+    right: 0;
+    width: 2px;
+    height: 100%;
+    padding: 1rem 0;
+    position: absolute;
+    background-color: rgb(82 82 82);
+}
