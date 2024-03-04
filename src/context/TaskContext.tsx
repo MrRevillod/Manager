@@ -2,7 +2,7 @@
 import { ReactNode, Dispatch, SetStateAction, useEffect } from "react"
 import { useState, useContext, createContext } from "react"
 import { Task } from "../types"
-import { addTask, deleteTask } from "../lib/TaskServices"
+import { addTask, deleteTask, updateTask } from "../lib/TaskServices"
 
 import { documentDir } from "@tauri-apps/api/path"
 import { readTextFile } from "@tauri-apps/api/fs"
@@ -14,7 +14,7 @@ interface TaskContextType {
     setCategorie: Dispatch<SetStateAction<string>>
     useAddTask: (task: Task) => Promise<void>
     useDeleteTask: (task: Task) => Promise<void> 
-    useUpdateTask: () => void
+    useUpdateTask: (task: Task) => Promise<void>
     useGetTasks: () => void
 }
 
@@ -25,8 +25,8 @@ const initialTaskContext: TaskContextType = {
     setCategorie: () => {},
     useAddTask: async () => {},
     useDeleteTask: async () => {},
-    useUpdateTask: () => {},
-    useGetTasks: () => {},
+    useUpdateTask: async () => {},
+    useGetTasks: async () => {},
 }
 
 interface Props {
@@ -44,28 +44,33 @@ export const TaskProvider = ({ children }: Props) => {
     const useAddTask = async (task: Task) => {
 
         try {
-
             await addTask(task)
             setTasks([...tasks, task])
-        
         } catch (error) {
             console.error(error)
         }
-
     }
 
     const useDeleteTask = async (task: Task) => {
 
         try {
-
             await deleteTask(task)
-
         } catch (error) {
             console.error(error)
         }
     }
 
-    const useUpdateTask = () => {}
+    const useUpdateTask = async (task: Task) => {
+
+        try {
+            await updateTask(task)
+
+            console.log("Task updated successfully!")
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
     const useGetTasks = async () => {
 
         try {

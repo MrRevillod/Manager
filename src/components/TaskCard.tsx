@@ -18,7 +18,11 @@ export const TaskCard = (task: Task) => {
     }
 
     const viewTaskDetails = () => {
-        setModal('taskDetails', true, task)
+        setModal("taskDetails", true, task)
+    }
+
+    const handleUpdate = () => {
+        setModal("taskUpdate", true, task)
     }
 
     return (
@@ -27,7 +31,7 @@ export const TaskCard = (task: Task) => {
             gap-4 p-4 bg-neutral-800 border-1 border-neutral-700 rounded-lg relative
         ">
 
-            <button onClick={viewTaskDetails} className="absolute top-0 right-0 m-4 mx-5">
+            <button onClick={viewTaskDetails} className="absolute top-0 right-0 m-4 mx-5 -p-4">
                 <i className="bi bi-arrows-angle-expand"></i>
             </button>
 
@@ -48,7 +52,7 @@ export const TaskCard = (task: Task) => {
                 </div>
 
                 <div className="flex flex-row gap-4 items-center justify-center">
-                    <button>
+                    <button onClick={handleUpdate}>
                         <i className="bi bi-pencil-square"></i>
                     </button>
                     <button onClick={handleDelete}>

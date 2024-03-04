@@ -6,6 +6,7 @@ export interface ModalState {
     settings: boolean
     taskPanel: boolean
     taskDetails: boolean
+    taskUpdate: boolean
 }
 
 export interface StoreState {
@@ -20,6 +21,7 @@ export const useModals = create<StoreState>((set) => ({
         settings: false,
         taskPanel: false,
         taskDetails: false,
+        taskUpdate: false,
     },
 
     task: null,

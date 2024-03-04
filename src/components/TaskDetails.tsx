@@ -14,8 +14,6 @@ export const TaskDetailsModal = () => {
 
     const { title, description, completed, 
         important, course, startAt, endsAt }: Task = task
-
-    console.log(task)
     
     return (
 
@@ -23,13 +21,14 @@ export const TaskDetailsModal = () => {
             isOpen={modals.taskDetails}
             onClose={() => setModal('taskDetails', false, null)}
         >
-            <div className="h-full w-full p-20 text-neutral-200 flex flex-col gap-16">
+            <div className="h-full w-full text-neutral-200 flex flex-col gap-10 justify-center">
 
-                <h1 className="text-4xl font-bold">{title}</h1>
-
-                <div className="flex flex-row gap-2">
-                    <StatusPill completed={completed}/>
-                    {important && <p className={`bg-yellow-700 px-4 py-1 rounded-xl w-28 text-center`}>Important</p>}
+                <div className="flex flex-col gap-8">
+                    <h1 className="text-4xl font-bold">{title}</h1>
+                    <div className="flex flex-row gap-2">
+                        <StatusPill completed={completed}/>
+                        {important && <p className={`bg-yellow-700 px-4 py-1 rounded-xl w-28 text-center`}>Important</p>}
+                    </div>
                 </div>
 
                 <div className="flex flex-col gap-1">

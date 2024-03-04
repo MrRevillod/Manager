@@ -37,18 +37,16 @@ export const newTaskSchema = z.object({
         .min(3, { message: 'Course must be at least 3 characters long' })
         .max(50, { message: 'Course must be at most 50 characters long' }),
 
-    endsAt: z.string()
-        .refine((date) => {
-            const now = new Date()
-            const inputDate = new Date(date)
-            return inputDate.getTime() >= now.getTime()
-
-        }, {
-            message: 'End date must be in the future'
-        }),
-
+    endsAt: z.string(),
     timeEnd: z.string(),
     completed: z.boolean(),
     important: z.boolean(),
+
+}).refine(data => {
+    const now = new Date()
+    const inputDate = new Date(`${data.endsAt}T${data.timeEnd}`)
+    return inputDate.getTime() >= now.getTime()
+}, {
+    message: 'End date and time must be in the future'
 })
 

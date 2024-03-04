@@ -4,6 +4,7 @@ import Modal from "./ui/Modal"
 import { useModals } from "../context/ModalsContext"
 import { NewTaskModal } from "./NewTask"
 import { TaskDetailsModal } from "./TaskDetails"
+import { UpdateTaskModal } from "./UpdateTask"
 
 const SettingsModal = () => {
 
@@ -30,6 +31,7 @@ export const Modals = () => {
             <NewTaskModal/>
             <TaskDetailsModal />
             <SettingsModal />
+            <UpdateTaskModal />
         </>
     )
 }

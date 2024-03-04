@@ -2,50 +2,70 @@
 import moment from "moment"
 import Modal from "./ui/Modal"
 
+import { useEffect } from "react"
 import { useModals } from "../context/ModalsContext"
-import { Inputs, newTaskSchema } from "../types"
+import { Inputs, Task, newTaskSchema } from "../types"
 
 import { useTask } from "../context/TaskContext"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm, SubmitHandler } from "react-hook-form"
+
 import { TextInput, CheckBox, CalendarInput, ClockInput } from "./ui/Input"
 
 import { v4 as uuid } from "uuid"
 
-export const NewTaskModal = () => {
+export const UpdateTaskModal = () => {
 
-    const { useAddTask } = useTask()
-    const { modals, setModal } = useModals()
+    const { useUpdateTask } = useTask()
+    const { task, modals, setModal } = useModals()
 
-    const { register, handleSubmit, formState: { errors }, reset } = useForm<Inputs>({
+    const { register, handleSubmit, formState: { errors }, reset, setValue, setError } = useForm<Inputs>({
         resolver: zodResolver(newTaskSchema),
     })
+
+    useEffect(() => {
+        if (task && modals.taskUpdate) {
+            setValue("title", task.title)
+            setValue("description", task.description)
+            setValue("completed", task.completed)
+            setValue("important", task.important)
+            setValue("course", task.course)
+            setValue("endsAt", moment(task.endsAt, "dddd, DD/MM/YYYY").format("YYYY-MM-DD"))
+            setValue("timeEnd", moment(task.endsAt, "dddd, DD/MM/YYYY - HH:mm").format("HH:mm"))
+        }
+    }, [task, modals.taskUpdate, setValue])
     
     const onSubmit: SubmitHandler<Inputs> = async (formData: Inputs) => {
 
-        const endsAt = moment(`${formData.endsAt} ${formData.timeEnd}`, "YYYY-MM-DD HH:mm")
+        const endsAt = moment(`${formData.endsAt} ${formData.timeEnd}`, 'YYYY-MM-DD HH:mm')
 
-        const task = {
-            id: uuid(),
+        if (endsAt.isBefore(moment())) {
+            setError('endsAt', { message: 'End date and time must be in the future' })
+            console.log('End date and time must be in the future')
+            return
+        }
+
+        const update: Task = {
+            id: task?.id || uuid(),
             title: formData.title,
             description: formData.description,
             completed: formData.completed,
             important: formData.important,
             course: formData.course,
-            startAt: moment().format("dddd, DD/MM/YYYY"),
-            endsAt: endsAt.format("dddd, DD/MM/YYYY - HH:mm"),
+            startAt: moment().format('dddd, DD/MM/YYYY'),
+            endsAt: endsAt.format('dddd, DD/MM/YYYY - HH:mm'),
         }
 
-        await useAddTask(task)
-        setModal("taskPanel", false, null)
+        await useUpdateTask(update)
+        setModal("taskUpdate", false, null)
     }
 
     return (
 
         <Modal
-            isOpen={modals.taskPanel}
-            onClose={() => { reset(); setModal("taskPanel", false, null) }}
-        >
+            isOpen={modals.taskUpdate}
+            onClose={() => { reset(); setModal("taskUpdate", false, null) }}
+        >{
             <div className="h-full w-full text-neutral-200 flex flex-col gap-10 justify-center">
 
                 <h1 className="text-3xl font-bold">Add a new task</h1>
@@ -129,6 +149,7 @@ export const NewTaskModal = () => {
 
                 </form>
             </div>
+        }
         </Modal>
     )
 }

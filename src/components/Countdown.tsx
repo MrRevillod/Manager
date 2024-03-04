@@ -19,6 +19,12 @@ export const Countdown = ({ targetDate }: CountdownProps) => {
             const endsAt = moment(targetDate, 'dddd, DD/MM/YYYY - HH:mm')
             const duration = moment.duration(endsAt.diff(now))
 
+            if (duration.asSeconds() <= 0) {
+                setTimeRemaining("Time's up!")
+                clearInterval(intervalId)
+                return
+            }
+
             const days = Math.floor(duration.asDays())
             const hours = duration.hours()
             const minutes = duration.minutes()

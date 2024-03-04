@@ -14,7 +14,7 @@ export const addTask = async (task: Task) => {
 
     fileTasks.push(task)
 
-    await writeTextFile(`${appDataPath}/tasks.json`, 
+    await writeTextFile(`${appDataPath}/tasks.json`,
         JSON.stringify(fileTasks)
     )
 }
@@ -30,8 +30,30 @@ export const deleteTask = async (task: Task) => {
 
     let filteredTasks = fileTasks.filter((t: Task) => t.id !== task.id)
 
-    await writeTextFile(`${appDataPath}/tasks.json`, 
+    await writeTextFile(`${appDataPath}/tasks.json`,
         JSON.stringify(filteredTasks)
+    )
+}
+
+export const updateTask = async (task: Task) => {
+
+    let documentPath = await documentDir()
+    let appDataPath = `${documentPath}/manager-app`
+
+    let tasksData = await readTextFile(`${appDataPath}/tasks.json`)
+    let fileTasks = JSON.parse(tasksData)
+
+    let updatedTasks = fileTasks.map((t: Task) => {
+
+        if (t.id === task.id) {
+            return task
+        }
+
+        return t
+    })
+
+    await writeTextFile(`${appDataPath}/tasks.json`,
+        JSON.stringify(updatedTasks)
     )
 }
 
