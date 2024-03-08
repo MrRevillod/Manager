@@ -34,8 +34,8 @@
     "windows": [
       {
         "title": "Manager",
-        "width": 1280,
-        "height": 820
+        "width": 1400,
+        "height": 900
       }
     ],
     "security": {
@@ -43,8 +43,8 @@
     },
     "bundle": {
       "active": true,
-      "targets": "all",
-      "identifier": "com.tauri.dev",
+      "targets": "deb",
+      "identifier": "com.revillod.dev",
       "icon": [
         "icons/icon.svg"
       ]
