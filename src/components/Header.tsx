@@ -1,11 +1,11 @@
 
 import { useModals } from "../context/ModalsContext"
-import { useTask } from "../context/TaskContext"
+import { useTaskStore } from "../context/TaskContext"
 
-const Header = () => {
+export const Header = () => {
 
     const { setModal } = useModals()
-    const { categorie } = useTask()
+    const { categorie } = useTaskStore()
 
     const handleAddTask = () => setModal("taskPanel", true, null)
 
@@ -27,5 +27,3 @@ const Header = () => {
         </header>
     )
 }
-
-export default Header

@@ -1,7 +1,7 @@
 
 import { Task } from "../types"
 import { useModals } from "../context/ModalsContext"
-import { useTask } from "../context/TaskContext"
+import { useTaskStore } from "../context/TaskContext"
 
 export const TaskCard = (task: Task) => {
 
@@ -11,7 +11,7 @@ export const TaskCard = (task: Task) => {
     const color = completed ? "bg-green-900" : !completed ? "bg-red-900" : "bg-gray-500"
 
     const { setModal } = useModals()
-    const { useDeleteTask } = useTask()
+    const { useDeleteTask } = useTaskStore()
 
     const handleDelete = async () => {
         await useDeleteTask(task)

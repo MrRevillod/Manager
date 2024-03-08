@@ -1,8 +1,8 @@
 
-import { useTask } from "../context/TaskContext"
 import { useModals } from "../context/ModalsContext"
+import { useTaskStore } from "../context/TaskContext"
 
-const Navbar = () => {
+export const Navbar = () => {
 
     const menuItems = [{
         title: "All Tasks",
@@ -55,7 +55,7 @@ interface MenuItemProps {
 
 const MenuItem = ({ title, icon }: MenuItemProps) => {
 
-    const { categorie, setCategorie } = useTask()
+    const { categorie, setCategorie } = useTaskStore()
 
     const handleClick = () => {
         setCategorie(title)
@@ -79,7 +79,7 @@ const Settings = () => {
     const { modals, setModal } = useModals()
 
     const handleOpen = () => {
-        setModal('settings', true, null)
+        setModal("settings", true, null)
     }
 
     const classes = `
@@ -96,5 +96,4 @@ const Settings = () => {
     )
 }
 
-export default Navbar
 

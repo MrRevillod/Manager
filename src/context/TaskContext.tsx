@@ -1,118 +1,81 @@
 
-import { ReactNode, Dispatch, SetStateAction, useEffect } from "react"
-import { useState, useContext, createContext } from "react"
 import { Task } from "../types"
+import { create } from "zustand"
 import { addTask, deleteTask, updateTask } from "../lib/TaskServices"
-
-import { documentDir } from "@tauri-apps/api/path"
 import { readTextFile } from "@tauri-apps/api/fs"
+import { documentDir } from "@tauri-apps/api/path"
 
-interface TaskContextType {
+interface TaskStore {
+    
     tasks: any[]
-    setTasks: Dispatch<SetStateAction<any[]>>
     categorie: string
-    setCategorie: Dispatch<SetStateAction<string>>
+    
+    setTasks: (taks: any[]) => void
+    setCategorie: (categorie: string) => void
+
     useAddTask: (task: Task) => Promise<void>
     useDeleteTask: (task: Task) => Promise<void> 
     useUpdateTask: (task: Task) => Promise<void>
     useGetTasks: () => void
 }
 
-const initialTaskContext: TaskContextType = {
+export const useTaskStore = create<TaskStore>((set, get) => ({
+
     tasks: [],
-    setTasks: () => {},
     categorie: "All Tasks",
-    setCategorie: () => {},
-    useAddTask: async () => {},
-    useDeleteTask: async () => {},
-    useUpdateTask: async () => {},
-    useGetTasks: async () => {},
-}
 
-interface Props {
-    children: ReactNode
-}
+    setTasks: (tasks: any[]) => set({ tasks }),
+    setCategorie: (categorie: string) => set ({ categorie }),
 
-export const TaskContext = createContext<TaskContextType>(initialTaskContext)
-export const useTask = () => useContext(TaskContext)
-
-export const TaskProvider = ({ children }: Props) => {
-
-    const [tasks, setTasks] = useState<any[]>([])
-    const [categorie, setCategorie] = useState("All Tasks")
-
-    const useAddTask = async (task: Task) => {
+    useAddTask: async (task: Task) => { 
 
         try {
-            await addTask(task)
-            setTasks([...tasks, task])
+            await addTask(task) 
         } catch (error) {
-            console.error(error)
+            console.error(`Error on the useAddTask hook: ${ error } `)
         }
-    }
+    },
 
-    const useDeleteTask = async (task: Task) => {
+    useDeleteTask: async (task: Task) => {
 
         try {
-            await deleteTask(task)
+            await deleteTask(task) 
         } catch (error) {
-            console.error(error)
+            console.error(`Error on the useDeleteTask hook: ${ error } `)
         }
-    }
+    },
 
-    const useUpdateTask = async (task: Task) => {
+    useUpdateTask: async (task: Task) => {
 
         try {
-            await updateTask(task)
-
-            console.log("Task updated successfully!")
+            await updateTask(task) 
         } catch (error) {
-            console.error(error)
+            console.error(`Error on the useUpdateTask hook: ${ error } `)
         }
-    }
+    },
 
-    const useGetTasks = async () => {
+    useGetTasks: async () => {
 
         try {
             
-            const documentPath = await documentDir()
-            const appDataPath = `${documentPath}/manager-app`
-            const tasksData = JSON.parse(await readTextFile(`${appDataPath}/tasks.json`))
-            setTasks(tasksData)
-
-            if (categorie === "Important") {
-                setTasks(tasks.filter((task: Task) => task.important === true))
-            }
-
-            if (categorie === "Completed") {
-                setTasks(tasks.filter((task: Task) => task.completed === true))
-            }
-        
+            const documentsDir = await documentDir()
+    
+            const appTasks = JSON.parse(
+                await readTextFile(`${documentsDir}manager-app/tasks.json`)
+            )
+    
+            set({ tasks: appTasks })
+    
+            if (get().categorie === "Important") set({ 
+                tasks: get().tasks.filter((task: Task) => task.important === true)
+            })
+    
+            if (get().categorie === "Completed") set({
+                tasks: get().tasks.filter((task: Task) => task.completed === true)
+            })
+            
         } catch (error) {
-            console.error(error)
+            console.error(`Error on the useGetTask hook: ${ error } `)
         }
     }
-
-    useEffect(() => {
-        
-        useGetTasks()
-
-    }, [tasks])
-
-    return (
-        <TaskContext.Provider 
-            value={{ 
-                tasks, 
-                setTasks,
-                categorie,
-                setCategorie,
-                useAddTask,
-                useDeleteTask,
-                useUpdateTask,
-                useGetTasks,
-            }}
-        >
-            { children }
-        </TaskContext.Provider>
-    )
-}
+}))

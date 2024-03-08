@@ -1,20 +1,16 @@
 
 import { create } from "zustand"
 
-import { exists } from "@tauri-apps/api/fs"
 import { documentDir } from "@tauri-apps/api/path"
-import { writeTextFile, createDir, readTextFile } from "@tauri-apps/api/fs"
-
-import { useTask } from "../context/TaskContext"
+import { writeTextFile, createDir, exists } from "@tauri-apps/api/fs"
 
 export interface AppState {
     applicationDir: string
     profilePicture: string
     createAppdata: () => void
-    readAppdata: () => void
 }
 
-export const useAppState = create<AppState>((set, get) => ({
+export const useAppState = create<AppState>(set => ({
 
     applicationDir: "",
     profilePicture: "",
@@ -39,22 +35,4 @@ export const useAppState = create<AppState>((set, get) => ({
 
         set({ applicationDir: appDataPath })
     },
-
-    readAppdata: async () => {
-
-        const { setTasks } = useTask() 
-
-        const applicationDir = get().applicationDir
-        const createAppdata = get().createAppdata
-
-        if (!await exists(applicationDir)) {
-            createAppdata()
-        }
-
-        const tasksData = JSON.parse(
-            await readTextFile(`${applicationDir}/tasks.json`)
-        )
-
-        setTasks(tasksData)
-    }
 }))

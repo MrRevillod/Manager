@@ -1,22 +1,26 @@
 
-import { useTask } from "./context/TaskContext"
 import { TaskCard } from "./components/TaskCard"
 import { useEffect } from "react"
 import { useAppState } from "./context/AppContext"
+import { useTaskStore } from "./context/TaskContext"
 
 export const App = () => {
-
-    const { tasks } = useTask()
-
-    const createAppdata = useAppState(state => state.createAppdata)
-    const readAppdata = useAppState(state => state.readAppdata)
+    
+    const { createAppdata } = useAppState()
+    const { tasks, useGetTasks } = useTaskStore()
 
     useEffect(() => {
 
         createAppdata()
-        readAppdata()
+        useGetTasks()
 
     }, [])
+
+    useEffect(() => {
+        
+        useGetTasks()
+
+    }, [tasks])
 
     return (
 

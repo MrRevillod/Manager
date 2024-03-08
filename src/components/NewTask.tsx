@@ -5,8 +5,8 @@ import Modal from "./ui/Modal"
 import { useModals } from "../context/ModalsContext"
 import { Inputs, newTaskSchema } from "../types"
 
-import { useTask } from "../context/TaskContext"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useTaskStore } from "../context/TaskContext"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { TextInput, CheckBox, CalendarInput, ClockInput } from "./ui/Input"
 
@@ -14,7 +14,7 @@ import { v4 as uuid } from "uuid"
 
 export const NewTaskModal = () => {
 
-    const { useAddTask } = useTask()
+    const { useAddTask } = useTaskStore()
     const { modals, setModal } = useModals()
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm<Inputs>({

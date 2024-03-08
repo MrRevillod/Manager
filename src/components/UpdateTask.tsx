@@ -6,8 +6,8 @@ import { useEffect } from "react"
 import { useModals } from "../context/ModalsContext"
 import { Inputs, Task, newTaskSchema } from "../types"
 
-import { useTask } from "../context/TaskContext"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useTaskStore } from "../context/TaskContext"
 import { useForm, SubmitHandler } from "react-hook-form"
 
 import { TextInput, CheckBox, CalendarInput, ClockInput } from "./ui/Input"
@@ -16,7 +16,7 @@ import { v4 as uuid } from "uuid"
 
 export const UpdateTaskModal = () => {
 
-    const { useUpdateTask } = useTask()
+    const { useUpdateTask } = useTaskStore()
     const { task, modals, setModal } = useModals()
 
     const { register, handleSubmit, formState: { errors }, reset, setValue, setError } = useForm<Inputs>({
@@ -24,6 +24,7 @@ export const UpdateTaskModal = () => {
     })
 
     useEffect(() => {
+
         if (task && modals.taskUpdate) {
             setValue("title", task.title)
             setValue("description", task.description)
@@ -33,31 +34,38 @@ export const UpdateTaskModal = () => {
             setValue("endsAt", moment(task.endsAt, "dddd, DD/MM/YYYY").format("YYYY-MM-DD"))
             setValue("timeEnd", moment(task.endsAt, "dddd, DD/MM/YYYY - HH:mm").format("HH:mm"))
         }
+
     }, [task, modals.taskUpdate, setValue])
     
     const onSubmit: SubmitHandler<Inputs> = async (formData: Inputs) => {
 
-        const endsAt = moment(`${formData.endsAt} ${formData.timeEnd}`, 'YYYY-MM-DD HH:mm')
+        try {
 
-        if (endsAt.isBefore(moment())) {
-            setError('endsAt', { message: 'End date and time must be in the future' })
-            console.log('End date and time must be in the future')
-            return
+            const endsAt = moment(`${formData.endsAt} ${formData.timeEnd}`, 'YYYY-MM-DD HH:mm')
+
+            if (endsAt.isBefore(moment())) {
+                setError('endsAt', { message: 'End date and time must be in the future' })
+                console.log('End date and time must be in the future')
+                return
+            }
+
+            const update: Task = {
+                id: task?.id || uuid(),
+                title: formData.title,
+                description: formData.description,
+                completed: formData.completed,
+                important: formData.important,
+                course: formData.course,
+                startAt: moment().format('dddd, DD/MM/YYYY'),
+                endsAt: endsAt.format('dddd, DD/MM/YYYY - HH:mm'),
+            }
+
+            await useUpdateTask(update)
+            setModal("taskUpdate", false, null)
+
+        } catch (error) {
+            console.log(`Error updating: ${error}`)
         }
-
-        const update: Task = {
-            id: task?.id || uuid(),
-            title: formData.title,
-            description: formData.description,
-            completed: formData.completed,
-            important: formData.important,
-            course: formData.course,
-            startAt: moment().format('dddd, DD/MM/YYYY'),
-            endsAt: endsAt.format('dddd, DD/MM/YYYY - HH:mm'),
-        }
-
-        await useUpdateTask(update)
-        setModal("taskUpdate", false, null)
     }
 
     return (
@@ -68,7 +76,7 @@ export const UpdateTaskModal = () => {
         >{
             <div className="h-full w-full text-neutral-200 flex flex-col gap-10 justify-center">
 
-                <h1 className="text-3xl font-bold">Add a new task</h1>
+                <h1 className="text-3xl font-bold">Update task</h1>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
 

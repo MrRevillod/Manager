@@ -1,14 +1,14 @@
 
-import React, { ReactNode } from "react"
+import { ReactNode } from "react"
 
-import Header from "../components/Header"
-import Navbar from "../components/Navbar"
+import { Header } from "../components/Header"
+import { Navbar } from "../components/Navbar"
 
 interface Props {
     children: ReactNode
 }
 
-const MainLayout: React.FC<Props> = ({ children }) => {
+export const MainLayout = ({ children }: Props) => {
     
     return (
 
@@ -24,5 +24,3 @@ const MainLayout: React.FC<Props> = ({ children }) => {
         </main>
     )
 }
-
-export default MainLayout
