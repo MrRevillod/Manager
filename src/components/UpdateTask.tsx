@@ -144,7 +144,7 @@ export const UpdateTaskModal = () => {
                         type="submit"
                         className="bg-neutral-200 text-neutral-950 rounded-lg p-2 font-bold mt-4"
                     >
-                        Add task
+                        Update task
                     </button>
 
                 </form>

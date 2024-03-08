@@ -9,14 +9,14 @@ interface CountdownProps {
 
 export const Countdown = ({ targetDate }: CountdownProps) => {
     
-    const [timeRemaining, setTimeRemaining] = useState('')
+    const [timeRemaining, setTimeRemaining] = useState("Loading...")
 
     useEffect(() => {
         
         const intervalId = setInterval(() => {
             
             const now = moment()
-            const endsAt = moment(targetDate, 'dddd, DD/MM/YYYY - HH:mm')
+            const endsAt = moment(targetDate, "dddd, DD/MM/YYYY - HH:mm")
             const duration = moment.duration(endsAt.diff(now))
 
             if (duration.asSeconds() <= 0) {

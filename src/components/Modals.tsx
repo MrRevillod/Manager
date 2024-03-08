@@ -16,8 +16,8 @@ const SettingsModal = () => {
             isOpen={modals.settings}
             onClose={() => setModal('settings', false, null)}
         > 
-            <div className="">
-                <h1>Settings panel</h1>
+            <div className="w-full h-full flex items-center justify-center">
+                <h1 className="text-5xl font-bold text-neutral-200">Settings panel</h1>
             </div>
         </Modal>
     )
