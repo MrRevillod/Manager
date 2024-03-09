@@ -1,12 +1,11 @@
 
 import moment from "moment"
-import Modal from "./ui/Modal"
 
-import { useModals } from "../context/ModalsContext"
-import { Inputs, newTaskSchema } from "../types"
-
+import { Modal } from "./ui/Modal"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useTaskStore } from "../context/TaskContext"
+import { useModalStore } from "../context/ModalsContext"
+import { Inputs, newTaskSchema } from "../types"
 import { useForm, SubmitHandler } from "react-hook-form"
 import { TextInput, CheckBox, CalendarInput, ClockInput } from "./ui/Input"
 
@@ -15,12 +14,12 @@ import { v4 as uuid } from "uuid"
 export const NewTaskModal = () => {
 
     const { useAddTask } = useTaskStore()
-    const { modals, setModal } = useModals()
+    const { modals, setModal } = useModalStore()
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm<Inputs>({
         resolver: zodResolver(newTaskSchema),
     })
-    
+
     const onSubmit: SubmitHandler<Inputs> = async (formData: Inputs) => {
 
         const endsAt = moment(`${formData.endsAt} ${formData.timeEnd}`, "YYYY-MM-DD HH:mm")
@@ -89,9 +88,9 @@ export const NewTaskModal = () => {
                             error={errors.endsAt?.message}
                         />
 
-                        <ClockInput 
-                            label="Time to end" 
-                            name="timeEnd" 
+                        <ClockInput
+                            label="Time to end"
+                            name="timeEnd"
                             register={register}
                             error={errors.timeEnd?.message}
                         />

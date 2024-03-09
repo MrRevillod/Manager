@@ -11,12 +11,12 @@ export interface ModalState {
 
 export interface StoreState {
     modals: ModalState;
-    task: Task | null;
+    task?: Task | null;
     setModal: (modal: keyof ModalState, value: boolean, task: OptionalTask) => void
 }
 
-export const useModals = create<StoreState>((set) => ({
-    
+export const useModalStore = create<StoreState>((set) => ({
+
     modals: {
         settings: false,
         taskPanel: false,

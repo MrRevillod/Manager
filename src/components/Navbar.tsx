@@ -1,22 +1,15 @@
 
-import { useModals } from "../context/ModalsContext"
+import { Each } from "./Each"
+import { menuItems } from "../lib/data"
 import { useTaskStore } from "../context/TaskContext"
+import { useModalStore } from "../context/ModalsContext"
+import { MenuItem, activeMenuItemClass } from "./ui/MenuItem"
 
 export const Navbar = () => {
 
-    const menuItems = [{
-        title: "All Tasks",
-        icon: "bi-list-task"
-    },
-    {
-        title: "Important",
-        icon: "bi-exclamation-triangle"
-    },
-    {
-        title: "Completed",
-        icon: "bi-check2-all"
-    }]
-    
+    const { modals, setModal } = useModalStore()
+    const { categorie, setCategorie } = useTaskStore()
+
     return (
 
         <nav className="
@@ -32,68 +25,28 @@ export const Navbar = () => {
 
             <ul className="flex flex-col w-full">
 
-                {menuItems.map(({ title, icon }, index) => {
-                    return (
-                        <MenuItem key={index} title={title} icon={icon} />
-                    )
-                })}
+                <Each
+                    items={menuItems}
+                    renderItem={({ title, icon }) => {
+
+                        return <MenuItem
+                            icon={icon}
+                            handleClick={() => setCategorie(title)}
+                            customClasses={activeMenuItemClass(title === categorie)}
+                        />
+                    }}
+                />
 
             </ul>
 
             <ul className="flex flex-col w-full">
-                <Settings />
+                <MenuItem
+                    icon="bi bi-gear-wide-connected"
+                    handleClick={() => setModal("settings", true, null)}
+                    customClasses={activeMenuItemClass(modals.settings)}
+                />
             </ul>
 
         </nav>
     )
 }
-
-interface MenuItemProps {
-    title: string
-    icon: string
-}
-
-const MenuItem = ({ title, icon }: MenuItemProps) => {
-
-    const { categorie, setCategorie } = useTaskStore()
-
-    const handleClick = () => {
-        setCategorie(title)
-    }
-
-    const classes = `
-        flex flex-row xl:justify-start justify-center items-center 
-        gap-2 cursor-pointer px-8 py-4 hover:bg-primary transition-all ease-in-out duration-300
-        ${categorie === title ? "bg-primary menu-item-selected relative" : "bg-primary-dark"}
-    `
-
-    return (
-        <li onClick={handleClick} className={classes}>
-            <i className={`${icon} text-xl`}></i>
-        </li>
-    )
-}
-
-const Settings = () => {
-
-    const { modals, setModal } = useModals()
-
-    const handleOpen = () => {
-        setModal("settings", true, null)
-    }
-
-    const classes = `
-        flex flex-row xl:justify-start justify-center items-center 
-        gap-2 cursor-pointer px-8 py-4 hover:bg-primary transition-all ease-in-out duration-300
-        ${modals.settings ? "bg-primary menu-item-selected relative" : "bg-primary-dark"}
-    `
-
-    return (
-
-        <li onClick={handleOpen} className={classes}>
-            <i className="bi bi-gear-wide-connected text-xl"></i>
-        </li>
-    )
-}
-
-

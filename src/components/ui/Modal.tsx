@@ -7,7 +7,7 @@ interface Props {
     children: ReactNode
 }
 
-const Modal = ({ isOpen, onClose, children }: Props) => {
+export const Modal = ({ isOpen, onClose, children }: Props) => {
 
     const handleOutsideClick = (_e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         onClose()
@@ -24,20 +24,20 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
     useEffect(() => {
 
         window.addEventListener("keydown", handleEscKey)
-        
+
         return () => {
             window.removeEventListener("keydown", handleEscKey)
         }
-        
+
     }, [])
 
     if (!isOpen) return null
-    
+
     const responsiveClasses = ``
 
     return (
-        
-        <div onClick={handleOutsideClick} 
+
+        <div onClick={handleOutsideClick}
 
             className="
                 fixed inset-0 flex items-center
@@ -62,5 +62,3 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
         </div>
     )
 }
-
-export default Modal
