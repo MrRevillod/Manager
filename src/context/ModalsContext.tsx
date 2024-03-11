@@ -7,6 +7,7 @@ export interface ModalState {
     taskPanel: boolean
     taskDetails: boolean
     taskUpdate: boolean
+    schedule: boolean
 }
 
 export interface StoreState {
@@ -22,6 +23,7 @@ export const useModalStore = create<StoreState>((set) => ({
         taskPanel: false,
         taskDetails: false,
         taskUpdate: false,
+        schedule: false,
     },
 
     task: null,
@@ -37,4 +39,5 @@ export const useModalStore = create<StoreState>((set) => ({
             task: task
         }))
     },
+
 }))

@@ -25,26 +25,33 @@ export const Navbar = () => {
 
             <ul className="flex flex-col w-full">
 
-                <Each
-                    items={menuItems}
-                    renderItem={({ title, icon }) => {
+                <Each items={menuItems} renderItem={({ title, icon }) => {
 
-                        return <MenuItem
-                            icon={icon}
-                            handleClick={() => setCategorie(title)}
-                            customClasses={activeMenuItemClass(title === categorie)}
-                        />
-                    }}
-                />
+                    return <MenuItem
+                        key={title}
+                        icon={icon}
+                        handleClick={() => setCategorie(title)}
+                        customClasses={activeMenuItemClass(title === categorie)}
+                    />
+
+                }} />
 
             </ul>
 
             <ul className="flex flex-col w-full">
+
+                <MenuItem
+                    icon="bi bi-calendar-range"
+                    handleClick={() => setModal("schedule", true, null)}
+                    customClasses={activeMenuItemClass(modals.schedule)}
+                />
+
                 <MenuItem
                     icon="bi bi-gear-wide-connected"
                     handleClick={() => setModal("settings", true, null)}
                     customClasses={activeMenuItemClass(modals.settings)}
                 />
+
             </ul>
 
         </nav>

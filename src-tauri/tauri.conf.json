@@ -29,6 +29,13 @@
       },
       "path": {
         "all": true
+      },
+      "protocol": {
+        "all": false,
+        "asset": true,
+        "assetScope": [
+          "$DOCUMENT/**"
+        ]
       }
     },
     "windows": [
