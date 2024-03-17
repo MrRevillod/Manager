@@ -1,9 +1,9 @@
 
 import { Task } from "../types"
 import { create } from "zustand"
-import { addTask, deleteTask, updateTask } from "../lib/TaskServices"
 import { readTextFile } from "@tauri-apps/api/fs"
 import { documentDir } from "@tauri-apps/api/path"
+import { addTask, deleteTask, updateTask } from "../lib/TaskServices"
 
 interface TaskStore {
 
@@ -22,7 +22,7 @@ interface TaskStore {
 export const useTaskStore = create<TaskStore>((set, get) => ({
 
     tasks: [],
-    categorie: "All Tasks",
+    categorie: "To Do",
 
     setTasks: (tasks: any[]) => set({ tasks }),
     setCategorie: (categorie: string) => set({ categorie }),
@@ -66,8 +66,8 @@ export const useTaskStore = create<TaskStore>((set, get) => ({
 
             set({ tasks: appTasks })
 
-            if (get().categorie === "Important") set({
-                tasks: get().tasks.filter((task: Task) => task.important === true)
+            if (get().categorie === "To Do") set({
+                tasks: get().tasks.filter((task: Task) => task.completed === false)
             })
 
             if (get().categorie === "Completed") set({

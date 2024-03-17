@@ -4,7 +4,7 @@ export const menuItems = [{
     icon: "bi-list-task"
 },
 {
-    title: "Important",
+    title: "To Do",
     icon: "bi-exclamation-triangle"
 },
 {

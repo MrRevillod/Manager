@@ -19,7 +19,7 @@ export const TaskDetailsModal = () => {
 
         <Modal
             isOpen={modals.taskDetails}
-            onClose={() => setModal('taskDetails', false, null)}
+            onClose={() => setModal("taskDetails", false, null)}
         >
             <div className="h-full w-full text-neutral-200 flex flex-col gap-10 justify-center">
 
@@ -52,7 +52,7 @@ export const TaskDetailsModal = () => {
                     </div>
                     <div className="flex flex-col gap-2 justify-end items-end">
                         <h3 className="text-lg font-semibold">Time Remaining</h3>
-                        <Countdown targetDate={endsAt} />
+                        {completed ? <p className="text-lg">Completed</p> : <Countdown targetDate={endsAt} />}
                     </div>
                 </div>
             </div>
